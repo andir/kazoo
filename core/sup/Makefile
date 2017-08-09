@@ -1,15 +1,9 @@
 ROOT = ../..
 PROJECT = sup
 
-all: ebin/sup.app sup
-
-ebin/sup.app:
-	@$(REBAR) compile
+all: sup
 
 sup:
-	@$(REBAR) escriptize
-
-clean:
-	rm ./sup
+	@$(REBAR) compile escriptize
 
 include $(ROOT)/make/kz.mk
