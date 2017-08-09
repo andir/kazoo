@@ -217,7 +217,7 @@ add_number_to_account(#kazoo_model{'numbers'=Numbers}=Model, AccountId, Number, 
                   },
     Model#kazoo_model{'numbers'=Numbers#{Number => NumberData}}.
 
--spec add_service_plan(model() | kz_proplist(), kzd_service_plan:doc()) -> model().
+-spec add_service_plan(model() | service_plans(), kzd_service_plan:doc()) -> model() | service_plans().
 -spec add_service_plan(model(), ne_binary(), kzd_service_plan:doc()) -> model().
 add_service_plan(#kazoo_model{'service_plans'=Plans}=Model, ServicePlan) ->
     Model#kazoo_model{'service_plans'=add_service_plan(Plans, ServicePlan)};
