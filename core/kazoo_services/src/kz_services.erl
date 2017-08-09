@@ -68,7 +68,9 @@
 -define(PLANS, <<"plans">>).
 -define(DEFAULT_PLAN, <<"default_service_plan">>).
 -define(SERVICE_MODULE_PREFIX, "kz_service_").
--define(SERVICE_MODULES, application:get_env(?APP, 'service_modules', default_service_modules())).
+-define(SERVICE_MODULES
+       ,application:get_env(?APP, 'service_modules', default_service_modules())
+       ).
 
 -record(kz_services, {account_id :: api_binary()
                      ,billing_id :: api_binary()
@@ -96,10 +98,12 @@
              ]).
 
 -define(SHOULD_ALLOW_UPDATES
-       ,kapps_config:get_is_true(?CONFIG_CAT, <<"default_allow_updates">>, 'true')).
+       ,kapps_config:get_is_true(?CONFIG_CAT, <<"default_allow_updates">>, 'true')
+       ).
 
 -define(DEFAULT_SERVICE_MODULES
-       ,kapps_config:get_ne_binaries(?CONFIG_CAT, <<"modules">>)).
+       ,kapps_config:get_ne_binaries(?CONFIG_CAT, <<"modules">>)
+       ).
 
 
 -ifdef(TEST).
@@ -1274,18 +1278,16 @@ get_item_plan(CategoryId, ItemId, ServicePlan) ->
 %%--------------------------------------------------------------------
 -spec get_service_modules() -> atoms().
 get_service_modules() ->
-    ServiceModules =
-        case kapps_config:get(?CONFIG_CAT, <<"modules">>) of
-            [_|_]=ConfModules ->
-                lager:debug("configured service modules: ~p", [ConfModules]),
-                ConfModules;
-            _ ->
-                ConfModules = ?SERVICE_MODULES,
-                kapps_config:set_default(?CONFIG_CAT, <<"modules">>, ConfModules),
-                lager:info("set default service modules: ~p", [ConfModules]),
-                ConfModules
-        end,
-    [kz_term:to_atom(Mod, 'true') || Mod <- ServiceModules].
+    case ?DEFAULT_SERVICE_MODULES of
+        [_|_]=ConfModules ->
+            lager:debug("configured service modules: ~p", [ConfModules]),
+            [kz_term:to_atom(Mod, 'true') || Mod <- ConfModules];
+        _ ->
+            ConfModules = ?SERVICE_MODULES,
+            kapps_config:set_default(?CONFIG_CAT, <<"modules">>, ConfModules),
+            lager:info("set default service modules: ~p", [ConfModules]),
+            ConfModules
+    end.
 
 -spec default_service_modules() -> atoms().
 default_service_modules() ->
