@@ -46,7 +46,7 @@ available_service_plans(API, AccountId) ->
     URL = string:join([account_service_plan_url(AccountId), "available"], "/"),
     RequestHeaders = pqc_cb_api:request_headers(API),
     pqc_cb_api:make_request([200]
-                           ,fun kz_http:get/3
+                           ,fun kz_http:get/2
                            ,URL
                            ,RequestHeaders
                            ).

@@ -137,8 +137,13 @@ default_request_headers(RequestId) ->
 -type response() :: binary() |
                     {'error', binary()}.
 
--spec make_request(expected_codes(), fun(), string(), kz_proplist()) -> response().
--spec make_request(expected_codes(), fun(), string(), kz_proplist(), iodata()) -> response().
+-type fun_2() :: fun((string(), kz_proplist()) -> kz_http:ret()).
+-type fun_3() :: fun((string(), kz_proplist(), iodata()) -> kz_http:ret()).
+
+-spec make_request(expected_codes(), fun_2(), string(), kz_proplist()) ->
+                          response().
+-spec make_request(expected_codes(), fun_3(), string(), kz_proplist(), iodata()) ->
+                          response().
 make_request(ExpectedCodes, HTTP, URL, RequestHeaders) ->
     ?INFO("~p: ~s", [HTTP, URL]),
     ?DEBUG("headers: ~p", [RequestHeaders]),
