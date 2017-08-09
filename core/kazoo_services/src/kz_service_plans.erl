@@ -82,14 +82,8 @@ merge_service_plans(#kz_service_plans{plans = Plans}, PlansJObj) ->
 -spec merge_plans(kzd_service_plan:doc(), kz_json:object()) -> kz_json:object().
 merge_plans(SerivcePlan, PlansJObj) ->
     case kzd_service_plan:plan(SerivcePlan, 'undefined') of
-        'undefined' ->
-            lager:info("no service plan in ~p", [SerivcePlan]),
-            PlansJObj;
-        Plan ->
-            lager:info("kz_json:merge(~p, ~p)"
-                      ,[PlansJObj, Plan]
-                      ),
-            kz_json:merge(PlansJObj, Plan)
+        'undefined' -> PlansJObj;
+        Plan -> kz_json:merge(PlansJObj, Plan)
     end.
 
 %%--------------------------------------------------------------------

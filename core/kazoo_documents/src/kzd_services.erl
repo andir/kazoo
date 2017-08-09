@@ -241,12 +241,8 @@ set_plans(JObj, Plans) ->
 
 -spec set_plan(doc(), ne_binary(), api_object()) -> doc().
 set_plan(JObj, PlanId, 'undefined') ->
-    lager:info("deleting plan ~s from service plans ~p", [PlanId, JObj]),
     kz_json:delete_key([?PLANS, PlanId], JObj);
 set_plan(JObj, PlanId, Plan) ->
-    lager:info("setting plan: ~p: ~p ~p"
-              ,[[?PLANS, PlanId], Plan, JObj]
-              ),
     kz_json:set_value([?PLANS, PlanId], Plan, JObj).
 
 -spec set_quantities(doc(), kz_json:object()) -> kz_json:object().

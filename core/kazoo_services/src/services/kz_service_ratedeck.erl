@@ -30,10 +30,8 @@ reconcile(Services) ->
 
     case kzd_service_plan:items(ServicePlanJObj, ?SERVICE_CATEGORY) of
         [] ->
-            lager:info("no keys in cat plan ~p, resetting"),
             kz_services:reset_category(?SERVICE_CATEGORY, Services);
         [RatedeckId] ->
-            lager:info("ratedeck ~s found", [RatedeckId]),
             kz_services:update(?SERVICE_CATEGORY, RatedeckId, 1, Services);
         [_|_] = R ->
             AccountId = kz_services:account_id(Services),
