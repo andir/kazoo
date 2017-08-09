@@ -67,7 +67,7 @@ run_counterexample(PQC) ->
             #{'request_id' := RequestId} = pqc_kazoo_model:api(PreCallState),
             ?INFO("postcondition returned false"),
             ?INFO("state prior to call:"),
-            [?INFO("~p: ~p", [Cat, Item]) || {Cat, Item} <- pqc_kazoo_model:pp(PreCallState)],
+            _ = [?INFO("~p: ~p", [Cat, Item]) || {Cat, Item} <- pqc_kazoo_model:pp(PreCallState)],
             ?INFO("call: ~s:~s(~p)", [M, F, A]),
             ?INFO("SUT resp: ~p", [Resp]),
             {RequestId, 'postcondition_failed'};
@@ -101,9 +101,9 @@ run_call(Var, {'call', M, F, Args}, {Step, PQC, State, Vars}) ->
             {Step+1, PQC, PQC:next_state(State, Resp, {'call', M, F, Args1}), Vars#{Var => Resp}};
         'false' ->
             ?INFO("postcondition failed:~n", []),
-            [?INFO("~p~n", [Model]) || Model <- pqc_kazoo_model:pp(State)],
+            _ = [?INFO("~p~n", [Model]) || Model <- pqc_kazoo_model:pp(State)],
             ?INFO("call ~p:~p(~p)~n", [M, F, Args1]),
-            throw({failed_postcondition, State, {M, F, Args1}, Resp})
+            throw({'failed_postcondition', State, {M, F, Args1}, Resp})
     end.
 
 resolve_args(Args, API, Vars) ->
