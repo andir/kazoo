@@ -34,25 +34,25 @@
 -include_lib("kazoo_stdlib/include/kz_databases.hrl").
 
 %% #{"prefix" => cost}
--type rate_data() :: #{ne_binary() => non_neg_integer()}.
+-type rate_data() :: #{ne_binary() := non_neg_integer()}.
 -type service_plans() :: [{ne_binary(), kzd_service_plan:plan()}].
 
--type account_data() :: #{'name' => ne_binary()
-                         ,'service_plans' => service_plans()
+-type account_data() :: #{'name' := ne_binary()
+                         ,'service_plans' := service_plans()
                          }.
 %% #{AccountId => AccountData}
--type accounts() :: #{ne_binary() => account_data()}.
+-type accounts() :: #{ne_binary() := account_data()}.
 
--type number_data() :: #{'number_state' => atom()
-                        ,'account_id' => ne_binary()
+-type number_data() :: #{'number_state' := atom()
+                        ,'account_id' := ne_binary()
                         }.
 %% #{DID => NumberData}
--type numbers() :: #{ne_binary() => number_data()}.
+-type numbers() :: #{ne_binary() := number_data()}.
 
 -record(kazoo_model
        ,{'accounts' = #{} :: accounts()
         ,'numbers' = #{} :: numbers()
-        ,'ratedecks' = #{} :: #{ne_binary() => rate_data()}
+        ,'ratedecks' = #{} :: #{ne_binary() := rate_data()}
         ,'service_plans' = [] :: service_plans()
         ,'api' :: pqc_cb_api:state()
         }
@@ -249,7 +249,11 @@ remove_number_from_account(#kazoo_model{'numbers'=Numbers}=Model
 transition_number_state(#kazoo_model{'numbers'=Numbers}=Model, Number, APIResp) ->
     NumberData = number_data(Numbers, Number),
     NumberState = {'call', 'pqc_cb_response', 'number_state', [APIResp]},
-    Model#kazoo_model{'numbers'=Numbers#{Number => NumberData#{'number_state' => NumberState}}}.
+    Model#kazoo_model{
+      'numbers'=Numbers#{
+                  Number => NumberData#{'number_state' => NumberState}
+                 }
+     }.
 
 -spec number_data(map() | model(), ne_binary()) -> map() | 'undefined'.
 number_data(#kazoo_model{'numbers'=Numbers}, Number) ->
