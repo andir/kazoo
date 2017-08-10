@@ -12,7 +12,7 @@ This is a guide to building Kazoo from source on a Debian 8 (Jessie) base instal
 sudo apt-get install build-essential libxslt-dev \
      zip unzip expat zlib1g-dev libssl-dev curl \
      libncurses5-dev git-core libexpat1-dev \
-     htmldoc
+     htmldoc wget
 ```
 
 Note: `htmldoc` is required only if [you want to be able to download PDFs](./announcements.md#company-directory-pdf).
